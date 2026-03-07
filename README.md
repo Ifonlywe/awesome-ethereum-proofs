@@ -1,0 +1,49 @@
+# Awesome Ethereum Proofs [![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
+
+Source code verification proofs for the earliest contracts on Ethereum (2015-2017), created through compiler archaeology and bytecode matching.
+
+Each proof independently compiles the original source code with the exact compiler version used at deployment time, producing a byte-for-byte match against on-chain bytecode. These are contracts too old for Etherscan's automated verification tools.
+
+Part of [Ethereum History](https://ethereumhistory.com/proofs).
+
+## Proofs
+
+| Contract | Deployed | Compiler | Method | Proof |
+|---|---|---|---|---|
+| [First Executable Contract](https://ethereumhistory.com/contract/0x6516298e1c94769432ef6d5f450579094e8c21fa) | Aug 7, 2015 (block 48,643) | soljson v0.1.1 | Exact bytecode match | [Repo](https://github.com/cartoonitunes/first-executable-contract-verification) |
+| [Vitalik's Currency Token](https://ethereumhistory.com/contract/0xa2e3680acaf5d2298697bdc016cf75a929385463) | Nov 12, 2015 (block 530,996) | Serpent @ f0b4128 | Exact bytecode match | [Repo](https://github.com/cartoonitunes/vitalik-currency-verification) |
+| [MistCoin](https://ethereumhistory.com/contract/0xf4eced2f682ce333f96f2d8966c613ded8fc95dd) | Nov 3, 2015 | Solidity | Exact bytecode match | [Source](https://github.com/crypt0biwan/mistcoin) |
+| [EF Multisig Wallet](https://ethereumhistory.com/contract/0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae) | Nov 6, 2015 | Solidity | Exact bytecode match | Etherscan |
+| [GavCoin](https://ethereumhistory.com/contract/0xb4abc1bfc403a7b82c777420c81269858a4b8aa4) | Apr 26, 2016 | Solidity | Exact bytecode match | Etherscan |
+| [SciFi Token](https://ethereumhistory.com/contract/0xd94badbe21fa4590b723bdb7121bffe1564ff91a) | Apr 1, 2016 | Solidity | Exact bytecode match | Etherscan |
+| [MeatConversionCalculator](https://ethereumhistory.com/contract/0x4ab274fc3a81b300a0016b3805d9b94c81fa54d2) | Apr 1, 2016 | Solidity | Author-published source | [Gist](https://gist.github.com/alexvandesande/3abc9f741471e08a6356) |
+| [Grinder Association](https://ethereumhistory.com/contract/0xc7e9ddd5358e08417b1c88ed6f1a73149beeaa32) | Apr 1, 2016 | Solidity | Author-published source | [Gist](https://gist.github.com/alexvandesande/3abc9f741471e08a6356) |
+
+## How It Works
+
+1. **Bytecode analysis** - Identify compiler patterns in the on-chain bytecode (constructor shape, memory allocation patterns, function selector dispatch)
+2. **Source reconstruction** - Reverse-engineer or locate the original source code from GitHub repos, gists, or archive.org
+3. **Compiler matching** - Try every compiler version from the deployment era until we get a byte-for-byte match
+4. **Publication** - Each proof is published as an open-source repo with a reproducible verification script
+
+## Notable Findings
+
+- **Vitalik's Currency Token** was compiled from `currency.se` (Serpent), not `currency.sol` (Solidity). The `ethereum/dapp-bin` repo had both implementations side by side. [Vitalik confirmed on Reddit](https://reddit.com/r/ethereum/comments/1rmheom/) with "Nice find!"
+- **First Executable Contract** was compiled with soljson v0.1.1, the earliest available Solidity compiler release, just 8 days after Ethereum mainnet launch.
+
+## Why This Matters
+
+Most contracts from 2015-2016 are unverified on Etherscan because:
+- The compiler versions are too old for automated tools
+- Some contracts used languages Etherscan doesn't support (Serpent, LLL)
+- Source code was never published or was lost
+
+These proofs preserve the technical history of Ethereum's earliest smart contracts.
+
+## Contributing
+
+Found source code for an early contract? Know the compiler version for an unverified 2015 contract? Open an issue or PR.
+
+## License
+
+[CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) - Public domain.
