@@ -20,6 +20,7 @@ Part of [Ethereum History](https://ethereumhistory.com/proofs).
 | [Vitalik's Currency Token](https://ethereumhistory.com/contract/0xa2e3680acaf5d2298697bdc016cf75a929385463) | Nov 12, 2015 (block 530,996) | Serpent @ f0b4128 | Exact bytecode match | [Repo](https://github.com/cartoonitunes/vitalik-currency-verification) |
 | [MeatConversionCalculator](https://ethereumhistory.com/contract/0x4ab274fc3a81b300a0016b3805d9b94c81fa54d2) | Apr 1, 2016 | Solidity | Author-published source | [Gist](https://gist.github.com/alexvandesande/3abc9f741471e08a6356) |
 | [Grinder Association](https://ethereumhistory.com/contract/0xc7e9ddd5358e08417b1c88ed6f1a73149beeaa32) | Apr 1, 2016 | Solidity | Author-published source | [Gist](https://gist.github.com/alexvandesande/3abc9f741471e08a6356) |
+| [Doubler](https://ethereumhistory.com/contract/0x2ff2a65b0a324c04747bfdc63f4bf525d43e5c62) | Jan 21, 2016 (block 883,117) | solc v0.2.0 (native C++) | Exact bytecode match | [Repo](https://github.com/cartoonitunes/doubler-verification) |
 | [GavCoin](https://ethereumhistory.com/contract/0xb4abc1bfc403a7b82c777420c81269858a4b8aa4) | Apr 26, 2016 | Solidity | Exact bytecode match | [Repo](https://github.com/cartoonitunes/gavcoin-verify) |
 
 ## How It Works
@@ -34,6 +35,8 @@ Part of [Ethereum History](https://ethereumhistory.com/proofs).
 - **Vitalik's Currency Token** was compiled from `currency.se` (Serpent), not `currency.sol` (Solidity). The `ethereum/dapp-bin` repo had both implementations side by side. [Vitalik confirmed on Reddit](https://reddit.com/r/ethereum/comments/1rmheom/) with "Nice find!"
 - **First Executable Contract** was compiled with soljson v0.1.1, the earliest available Solidity compiler release, just 8 days after Ethereum mainnet launch.
 - **FunDistributor** uses the `private` keyword for its internal `payout()` function - one of the earliest known uses of function visibility in a deployed contract. The keyword was supported in solc 0.1.1 but is rarely seen in contracts from this era. The original source was on Pastebin (expired); reconstructed entirely from on-chain bytecode.
+
+- **Doubler contract** required building a native C++ Solidity compiler from [webthree-umbrella](https://github.com/ethereum/webthree-umbrella) v1.1.2 to reproduce the exact bytecode. The JS soljson compiler produces functionally identical but bytecode-different output for pre-0.3.x contracts. The key insight: `amount > this.balance` (GT opcode) produces different bytecode than `this.balance < amount` (LT opcode), even though they're logically equivalent.
 
 ## Why This Matters
 
