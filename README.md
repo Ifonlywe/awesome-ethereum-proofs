@@ -175,3 +175,7 @@ Found source code for an early contract? Know the compiler version for an unveri
 
 [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) - Public domain.
 
+
+## Tools
+
+- **[Native C++ Solidity Compilers](https://github.com/cartoonitunes/solc-native-builds)** — Pre-built solc binaries for frontier-era bytecode archaeology. Required when soljson/npm builds produce close-but-not-exact matches.
