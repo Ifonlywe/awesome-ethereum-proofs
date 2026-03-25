@@ -84,6 +84,7 @@ Part of [Ethereum History](https://ethereumhistory.com/proofs).
 | [Peperium Series 2 Token](https://ethereumhistory.com/contract/0x5921f43985a027ba74ee110b77dce09b96de943e) | Aug 2017 (block 4,210,431) | solc v0.4.14 (optimizer OFF) | Near-exact bytecode match | [Repo](https://github.com/cartoonitunes/peperium-series2-verification) |
 | [Unicorns Token (0x1f75 / 0x59a2)](https://ethereumhistory.com/contract/0x1f75047233517dcf67970d9e3c3bb385cb647f30) | Feb 11, 2016 (block 987,979) | solc v0.1.1 native C++ (optimizer ON) | Source reconstructed - exact block multiset match | [Proof](proofs/unicorns-token/) |
 | [Unicorns Token (0x41a7)](https://ethereumhistory.com/contract/0x41a7820c86f4bea29e6c9239aeb0fbdba12dd790) | Feb 11, 2016 (block 988,807) | solc v0.1.1 native C++ (optimizer ON) | Source reconstructed - exact block multiset match | [Proof](proofs/unicorns-token/) |
+| [Unicorns Token (0xe369 / 0xab15)](https://ethereumhistory.com/contract/0xe36905580fa8cc3006c14bafab9d0ecf39c9c124) | Feb 11, 2016 (block 988,921) | solc ~v0.1.2 (Mist snapshot, optimizer ON) | Source reconstructed | [Proof](proofs/unicorns-avsa-1802b/) |
 
 ## How It Works
 
