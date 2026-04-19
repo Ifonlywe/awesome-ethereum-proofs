@@ -117,6 +117,7 @@ Part of [Ethereum History](https://ethereumhistory.com/proofs).
 | [Peperium Series 2 Token](https://ethereumhistory.com/contract/0x5921f43985a027ba74ee110b77dce09b96de943e) | Aug 2017 (block 4,210,431) | solc v0.4.14 (optimizer OFF) | Near-exact bytecode match | [Repo](https://github.com/cartoonitunes/peperium-series2-verification) |
 | [CryptoCats Pre-Launch Test (T1)](https://ethereumhistory.com/contract/0xD23AdE68C693264Aa9e8f8303F912A3E54718456) | Nov 11, 2017 (block 4,530,388) | Solidity 0.4.18 (optimizer ON) | Near-exact bytecode match | [Repo](https://github.com/cartoonitunes/cryptocats-t1-verification) |
 | [CryptoCats Pre-Launch Test (T2)](https://ethereumhistory.com/contract/0x78eea094e1d30141ccade64f8d29a7bfcc921f9e) | Nov 11, 2017 (block 4,532,036) | Solidity 0.4.18 (optimizer OFF) | Near-exact bytecode match (8137/8451, 96.3%) | [Repo](https://github.com/cartoonitunes/cryptocats-t2-verification) |
+| [CKBirthBot](https://ethereumhistory.com/contract/0x00000000a8f806c754549943b6550a2594c9a126) | Nov 28, 2018 (block 6,720,524) | solc v0.4.17 (optimizer OFF) | Exact bytecode match | [Repo](https://github.com/cartoonitunes/ckbirthbot-verification) |
 
 ## How It Works
 
