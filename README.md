@@ -120,6 +120,7 @@ Part of [Ethereum History](https://ethereumhistory.com/proofs).
 | [CryptoCats Pre-Launch Test (T1)](https://ethereumhistory.com/contract/0xD23AdE68C693264Aa9e8f8303F912A3E54718456) | Nov 11, 2017 (block 4,530,388) | Solidity 0.4.18 (optimizer ON) | Near-exact bytecode match | [Repo](https://github.com/cartoonitunes/cryptocats-t1-verification) |
 | [CryptoCats Pre-Launch Test (T2)](https://ethereumhistory.com/contract/0x78eea094e1d30141ccade64f8d29a7bfcc921f9e) | Nov 11, 2017 (block 4,532,036) | Solidity 0.4.18 (optimizer OFF) | Near-exact bytecode match (8137/8451, 96.3%) | [Repo](https://github.com/cartoonitunes/cryptocats-t2-verification) |
 | [CKBirthBot](https://ethereumhistory.com/contract/0x00000000a8f806c754549943b6550a2594c9a126) | Nov 28, 2018 (block 6,720,524) | solc v0.4.17 (optimizer OFF) | Exact bytecode match | [Repo](https://github.com/cartoonitunes/ckbirthbot-verification) |
+| [Exchange UserWallet (709k fleet)](https://ethereumhistory.com/contract/0x24eb8813f35fa3f594d8060cd05ecb2c3ba068a7) | Jan 4, 2018 (block 4,850,028) | solc v0.4.14–0.4.16 (optimizer ON, runs=200) | Code match — 627 runtime bytes (709,039 siblings, most-deployed bytecode in Ethereum history) | [Repo](https://github.com/cartoonitunes/userwallet-709k-verification) |
 
 ## How It Works
 
