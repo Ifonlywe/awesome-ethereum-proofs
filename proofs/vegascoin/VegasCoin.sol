@@ -1,3 +1,4 @@
+// Submitted by EthereumHistory (ethereumhistory.com)
 contract owned {
     address public owner;
 
@@ -53,7 +54,8 @@ contract token {
     }
 
     function approve(address _spender, uint256 _value) returns (bool success) {
-        allowance[msg.sender][_spender] = _value;
+        address dummy = _spender;
+        allowance[msg.sender][dummy] = _value;
         return true;
     }
 
@@ -151,10 +153,10 @@ contract MyAdvancedToken is owned, token {
         if (balanceOf[msg.sender] < amount) throw;
         balanceOf[this] += amount;
         balanceOf[msg.sender] -= amount;
-        if (msg.sender.send(amount * sellPrice)) {
-            Transfer(msg.sender, this, amount);
-        } else {
+        if (!msg.sender.send(amount * sellPrice)) {
             throw;
+        } else {
+            Transfer(msg.sender, this, amount);
         }
     }
 
