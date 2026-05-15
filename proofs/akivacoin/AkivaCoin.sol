@@ -1,0 +1,113 @@
+// Submitted by EthereumHistory (ethereumhistory.com)
+pragma solidity ^0.4.11;
+
+contract owned {
+    address public owner;
+
+    function owned() {
+        owner = msg.sender;
+    }
+
+    modifier onlyOwner {
+        require(msg.sender == owner);
+        _;
+    }
+
+    function transferOwnership(address newOwner) onlyOwner {
+        owner = newOwner;
+    }
+}
+
+contract tokenRecipient { function receiveApproval(address _from, uint256 _value, address _token, bytes _extraData); }
+
+contract token {
+    string public standard = "Token 0.1";
+    string public name;
+    string public symbol;
+    uint8 public decimals;
+    uint256 public totalSupply;
+
+    mapping (address => uint256) public balanceOf;
+    mapping (address => mapping (address => uint256)) public allowance;
+
+    event Transfer(address indexed from, address indexed to, uint256 value);
+
+    function token(
+        uint256 initialSupply,
+        string tokenName,
+        uint8 decimalUnits,
+        string tokenSymbol
+    ) {
+        balanceOf[msg.sender] = initialSupply;
+        totalSupply = initialSupply;
+        name = tokenName;
+        symbol = tokenSymbol;
+        decimals = decimalUnits;
+    }
+
+    function transfer(address _to, uint256 _value) {
+        require(balanceOf[msg.sender] >= _value);
+        require(balanceOf[_to] + _value >= balanceOf[_to]);
+        balanceOf[msg.sender] -= _value;
+        balanceOf[_to] += _value;
+        Transfer(msg.sender, _to, _value);
+        return;
+    }
+
+    function approve(address _spender, uint256 _value) returns (bool success) {
+        allowance[msg.sender][_spender] = _value;
+        return true;
+    }
+
+    function approveAndCall(address _spender, uint256 _value, bytes _extraData)
+        returns (bool success) {
+        tokenRecipient spender = tokenRecipient(_spender);
+        if (approve(_spender, _value)) {
+            spender.receiveApproval(msg.sender, _value, this, _extraData);
+            return true;
+        }
+    }
+
+    function () {
+        revert();
+    }
+}
+
+contract AkivaCoin is owned, token {
+    uint256 public sellPrice;
+    uint256 public buyPrice;
+
+    function AkivaCoin(
+        uint256 initialSupply,
+        string tokenName,
+        uint8 decimalUnits,
+        string tokenSymbol,
+        uint256 initialSellPrice,
+        uint256 initialBuyPrice
+    ) token (initialSupply, tokenName, decimalUnits, tokenSymbol) {
+        sellPrice = initialSellPrice;
+        buyPrice = initialBuyPrice;
+    }
+
+    function setPrices(uint256 newSellPrice, uint256 newBuyPrice) onlyOwner {
+        sellPrice = newSellPrice;
+        buyPrice = newBuyPrice;
+    }
+
+    function buy() payable {
+        uint amount = msg.value / buyPrice;
+        require(balanceOf[this] >= amount);
+        balanceOf[msg.sender] += amount;
+        balanceOf[this] -= amount;
+        Transfer(this, msg.sender, amount);
+    }
+
+    function sell(uint256 amount) {
+        require(balanceOf[msg.sender] >= amount);
+        balanceOf[this] += amount;
+        balanceOf[msg.sender] -= amount;
+        msg.sender.transfer(amount * sellPrice);
+        Transfer(msg.sender, this, amount);
+        if (false) {}
+    }
+}
