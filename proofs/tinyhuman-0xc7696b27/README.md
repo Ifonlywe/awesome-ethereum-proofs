@@ -6,7 +6,7 @@
 - **Block:** 319,299 (2015-10-01 22:26:28 UTC)
 - **Runtime size:** 5,673 bytes
 - **Balance (May 2026):** ~104,000 wei (dust)
-- **Verification status:** source_reconstructed (decompile only; no exact-source match found)
+- **Crack status: NOT cracked.** No serious reconstruction attempted, see `CRACK_ATTEMPT.md`. Palkeoramix decompile (33-line stub) is available.
 
 ## Identification
 
@@ -43,9 +43,14 @@ Each name has a corresponding share weight, and `purchase(bytes32)` splits the i
 
 The contract's life-to-date revenue is tiny because the front-end pricing was in USD with stems at low single-digit prices and downloads at low double-digit prices. Total earnings are consistent with the publicly-reported $133.20 across ~2 years.
 
+## Crack attempt result (NOT cracked)
+
+No serious reconstruction attempted. Palkeoramix failed on 30 of 33 functions. Reconstructing 5,673 bytes of bytecode for 33 functions (custom royalty-splitting with 8 hardcoded contributors, USD pricing oracle, 3-of-N board governance, per-stem purchase tracking) from scratch is multi-day effort. What would close it: BlockApps archive recovery, or a 0.1.x-aware decompiler that succeeds where Palkeoramix fails.
+
 ## Files
 
 - `decompile_palkeoramix.txt` - Palkeoramix decompile (Palkeoramix failed on 30/33 functions; the rest pass through as raw assembly)
+- `CRACK_ATTEMPT.md` - notes on why no full reconstruction was attempted
 
 ## References
 

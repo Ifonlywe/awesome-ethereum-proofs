@@ -6,11 +6,11 @@
 - **Block:** 767,989 (2015-12-29 22:33:08 UTC)
 - **Runtime size:** 6,244 bytes
 - **Balance (May 2026):** 0.884 ETH
-- **Verification status:** near_exact_match (source from repo, byte-identical first 86 bytes; remainder diverges by ~6 bytes)
+- **Crack status: NOT cracked.** Closest reproducer is 6,245 bytes (1 byte longer), see `CRACK_ATTEMPT.md`.
 
 ## Identification
 
-This is the December 2015 prototype DAO/Crowdfunding deployment by Christoph Jentzsch's slock.it team, the same group that later launched The DAO on 30 April 2016. Source comes from `blockchainsllc/DAO` at commit [`b7aeb4e654`](https://github.com/blockchainsllc/DAO/tree/b7aeb4e654), the last commit before this deployment (same calendar day, 5 hours earlier).
+This is the December 2015 prototype DAO/Crowdfunding deployment by Christoph Jentzsch's slock.it team, the same architecture that became The DAO on 30 April 2016. Source comes from `blockchainsllc/DAO` at commit [`b7aeb4e654`](https://github.com/blockchainsllc/DAO/tree/b7aeb4e654), the last commit before this deployment (same calendar day, 3 minutes after the deploy tx). Note: the GitHub commit is timestamped 3 minutes AFTER the on-chain deployment, suggesting the deployed source had local edits never pushed.
 
 The deployed contract is `contract DAO is DAOInterface, Token, Crowdfunding(...)` from `DAO.sol` at that commit. Selector decode of the deployed bytecode resolves cleanly against the union of `Token.sol`, `Crowdfunding.sol`, and `DAO.sol`:
 
@@ -18,19 +18,29 @@ The deployed contract is `contract DAO is DAOInterface, Token, Crowdfunding(...)
 - From `Crowdfunding.sol`: `Crowdfunding(uint256,uint256)` (constructor exposed as runtime selector), `closingTime()`, `minValue()`, `refund()`, `funded()`, `totalAmountReceived()`, `buyToken()`, `buyTokenProxy(address)`, `addAllowedAddress(address)`.
 - From `DAO.sol`: `proposals(uint256)`, `numProposals()`, `vote(uint256,bool)`, `executeProposal(uint256,bytes)`, `checkProposalCode(uint256,address,uint256,bytes)`, `changeProposalDeposit(uint256)`.
 
-## Reproducer status
+## Crack attempt result (NOT cracked)
 
-Compiled with Solidity v0.3.2+commit.81ae2a78 (optimizer ON), the source produces a 6,250-byte runtime versus the on-chain 6,244 bytes. The first 86 bytes (the function-dispatch table for the first 5 selectors) match byte-for-byte. The remaining bytes diverge.
+Compiled with `soljson-v0.1.6+commit.d41f8b7c` (optimizer ON), the source produces a 6,245-byte runtime vs the on-chain 6,244 bytes. The first 86 bytes of the dispatch table match byte-for-byte; the next ~6,160 bytes diverge in ways consistent with one source-level edit.
 
-Likely causes of the small mismatch:
-- The deployment is from a slightly different commit (the repo's git history continued evolving in the weeks around deployment; `b7aeb4e654` is the closest *visible* commit but the team may have had unpublished local edits).
-- Solidity v0.3.2 was released June 2016, six months *after* deployment, so the deployer used an earlier version (v0.1.7 / v0.2.x) whose code-gen differs slightly. Earlier soljson versions fail to compile the file as-is due to syntax incompatibilities with the DAO source.
+Diff analysis using difflib.SequenceMatcher:
+- mine 6,245 bytes, target 6,244 bytes (net +1 byte)
+- First divergence at byte offset 172
+- 31 diff regions total, most are 1-2 byte jump-destination shifts cascading from one root cause
+- 261-byte function appears at offset 3,028 in mine but at offset 5,795 in target (function moved to near end)
+- 2-byte `5190` (MLOAD SWAP1) extra at offset 1,591 in mine, 1-byte `51` (MLOAD) extra at 1,595 in target (net +1)
+- 4 byte-pair swaps (`0f`/`03`) in inline assembly for sha3 padding
 
-A byte-for-byte crack is achievable but requires manually backporting the source to v0.1.7 syntax (modifier syntax, `import` semantics).
+Tested earlier commits 95d85c6f48, 90a14073a3, 52b0a0f88a, b2cad2182f. All produce only ~18-byte prefix match (the contract structure was different prior to b7aeb4e654).
+
+Tested solc versions: v0.1.5 fails to compile (no `.push()` on `address[]`). v0.1.6 and v0.1.7 produce 6,245 bytes. v0.2.x produces 6,247. v0.3.0-0.3.2 produces 6,250. v0.3.3+ produces 6,291.
+
+The compiler version (v0.1.6) is consistent with the deployment date (29 December 2015, v0.1.6 was current). The 1-byte deficit and the 261-byte function reorder strongly suggest the deployed source was a local edit that never landed on GitHub.
+
+What would close it: a snapshot of the deployment-time local source, OR brute-forcing function permutations (intractable for 24 functions).
 
 ## Story
 
-This is the precursor of The DAO. The deployer 0xb9f40f5b61b5eb9135d268ee0964532f191edab8 was a slock.it test wallet. The 0.88 ETH balance has been stuck since the contract's `closingTime` passed in early 2016 (42-day default per `Crowdfunding(500000 ether, now + 42 days)` constructor in DAO.sol line 106). Since the `minValue` was 500,000 ETH and only fractional ETH was contributed, refunds were available via `refund()`, but the few wei that remained were never claimed.
+This is the precursor of The DAO. The deployer 0xb9f40f5b... was a slock.it test wallet. The 0.88 ETH balance has been stuck since the contract's 42-day closing window expired in early February 2016: minValue was 500,000 ETH and only fractional ETH was contributed, so the crowdsale failed and the contributions could have been pulled back via refund(), but the residual was never claimed.
 
 The same architecture (Token + Crowdfunding + DAO combined into a single deployment via `contract DAO is DAOInterface, Token, Crowdfunding(...)`) was reused for The DAO five months later on 30 April 2016. So this is the direct technical ancestor of the contract that triggered the Ethereum hard fork.
 
@@ -38,6 +48,8 @@ The same architecture (Token + Crowdfunding + DAO combined into a single deploym
 
 - `Token.sol`, `Crowdfunding.sol`, `DAO.sol` - source from blockchainsllc/DAO@b7aeb4e654
 - `target_runtime.txt` - on-chain runtime bytecode (6,244 bytes)
+- `verify.js` - best reproducer (produces 6,245 bytes, 1 byte off)
+- `CRACK_ATTEMPT.md` - detailed diff analysis
 
 ## References
 

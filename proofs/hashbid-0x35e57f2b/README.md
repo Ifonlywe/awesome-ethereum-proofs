@@ -6,7 +6,7 @@
 - **Block:** 75,971 (2015-08-12 04:52:38 UTC)
 - **Runtime size:** 2,152 bytes
 - **Balance (May 2026):** 0.106 ETH
-- **Verification status:** source_reconstructed (no matching source found)
+- **Crack status: NOT cracked.** Best partial reconstruction is 816 bytes (1,336 bytes short), see `CRACK_ATTEMPT.md`. No source published anywhere.
 
 ## Identification
 
@@ -37,6 +37,12 @@ A hash-prediction game with bid-and-solve mechanics:
 3. Rounds advance through phases tracked by `status()` / `setStatus()`. `interval()` returns the round length; `getCompetitionEnd()` returns the cutoff block.
 4. `submitSolution(uint)` is called once the target block is mined to claim the `bonusFund()` prize.
 
+## Crack attempt result (NOT cracked)
+
+Best partial reconstruction compiles to 816 bytes with v0.1.3-v0.1.7. Target is 2,152 bytes. cp=59 (only the boilerplate prelude and dispatch start match). Reconstruction is too sparse: `submitSolution`, `setStatus`, and several other function bodies are stubs. The unresolved selector `0x44b5f535` reads from a deterministic per-index storage slot but the function body and signature remain unknown.
+
+What would crack it: full hand-decompilation of all 13 functions (multi-day effort), or recovery of the original source from the deployer's archives.
+
 ## Deployer activity
 
 The deployer self-seeded the game in the first hour after deployment:
@@ -48,12 +54,6 @@ The deployer self-seeded the game in the first hour after deployment:
 - Block 76,283: `newBid(...)`
 
 The deployer's tx history (blocks 48679/48687) shows two earlier sends to Kraken's hot wallet at `0x2910543af39aba0cd0` with deposit tag `ENNX1N6W0`.
-
-## Next steps for a full crack
-
-- Decompile with Heimdall or Panoramix to recover storage layout.
-- Compile candidates with solc v0.1.x docker images at `/Users/claw/.openclaw/tools/` and compare runtime bytecode.
-- Try `0x44b5f535` against common 2015 method names (`expire()`, `dispute()`, `claim()`).
 
 ## References
 
