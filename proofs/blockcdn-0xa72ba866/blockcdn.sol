@@ -1,3 +1,4 @@
+// Submitted by EthereumHistory (ethereumhistory.com)
 pragma solidity ^0.4.2;
 contract blockcdn {
     mapping (address => uint256) balances;
