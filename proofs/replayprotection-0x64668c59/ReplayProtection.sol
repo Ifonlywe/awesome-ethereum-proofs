@@ -7,9 +7,8 @@ contract ReplayProtection {
     bytes32 public chainSignature;
 
     function ReplayProtection() {
-        bytes32 blockHash = 0xcf9055c648b3689a2b74e980fc6fa27817622fa9ac0749d60a6489a7fbcfe831;
-        for (uint i = 1; i < 64; i++) {
-            if (blockHash == block.blockhash(block.number - i)) chainSignature = blockHash;
+        for (uint i = 1; i < 16; i++) {
+            chainSignature = sha3(chainSignature, block.blockhash(block.number - i));
         }
     }
 

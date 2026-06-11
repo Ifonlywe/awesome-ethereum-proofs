@@ -7,7 +7,21 @@
 - **Runtime size:** 532 bytes
 - **Runtime SHA-256:** `a6e5ae070945319e9e945dd8bb0cfe9ededeef0ee1453dbfc25600244fec04be`
 - **Balance (June 2026):** 0 ETH
-- **Crack status: CRACKED.** Compiled source produces a byte-for-byte runtime match with the on-chain code.
+- **Crack status: CRACKED (full match).** Compiled source produces a byte-for-byte match against both the on-chain **runtime** (532 bytes) and the on-chain **creation** bytecode (592-byte deployment input, no constructor args).
+- **Verified on:** Sourcify (full match, runtime + creation) and Etherscan.
+
+## Constructor (chain fingerprint)
+
+The constructor takes no arguments. It derives the chain fingerprint at deploy time by hashing the 15 most recent blockhashes into storage slot 0:
+
+```solidity
+function ReplayProtection() {
+    for (uint i = 1; i < 16; i++)
+        chainSignature = sha3(chainSignature, block.blockhash(block.number - i));
+}
+```
+
+This is what makes the contract chain-aware: ETH and ETC have different recent blockhashes, so `chainSignature` differs per chain, and the split functions branch on it. The on-chain `chainSignature` is `0xdaea83069d69f3a640a9d769833318372d92c67e0a5ebbe81363c4adbc42b9ae`, reproduced exactly by this constructor (which is why the creation bytecode matches byte-for-byte).
 
 ## Identification
 
